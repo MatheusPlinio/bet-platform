@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  backend:
+    build: 
+      context: ./backend
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/home/node/app
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    mem_limit: 2g
+
+  frontend:
+    build:
+      context: ./front-end
+    ports:
+      - "3002:3002"
+  db_postgresql:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: default
+    volumes:
+      - db-postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7.2
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  db-postgres:
+  redis-data:
+# networks:
+#   my-network:
+#     external: true
+networks:
+  my-network:
+    driver: bridge
