@@ -12,6 +12,7 @@ services:
       - "host.docker.internal:host-gateway"
     mem_limit: 2g
 
+
   frontend:
     build:
       context: ./front-end
